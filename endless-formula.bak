@@ -1,0 +1,13 @@
+#lang racket
+
+(define (cont-frac n d k)
+  (if (= k 0)
+      0
+      (/ (n k) (+ (d k) (cont-frac n d (- k 1))))))
+; 无穷连分式
+(define (cont-frac-iter n d k)
+  (define (cont-frac-test a n d k)
+    (if (= k 0)
+        a
+        (cont-frac-test (/ (n k) (+ a (d k))) n d (- k 1))))
+  (cont-frac-test 0 n d k))

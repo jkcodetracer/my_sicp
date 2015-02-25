@@ -1,0 +1,54 @@
+#lang racket
+
+
+(define (count-leves x)
+  (cond ((null? x) 0)
+        ((not (pair? x)) 1)
+        (else (+ (count-leves (car x))
+                 (count-leves (cdr x))))))
+
+(define x (list 1 3 (list 5 7) 9))
+(define y (list (list 7)))
+(define z (list 1 (list 2 (list 3 (list 4 (list 5 ( list 6 7)))))))
+; for 2.25
+(define xx (car (cdr (car (cdr (cdr x))))))
+(define yy (car (car y)))
+(define zz (car (cdr (car (cdr (car (cdr (car (cdr (car (cdr (car (cdr z)))))))))))))
+
+(define x2 (list 1 2 3))
+(define y2 (list 4 5 6))
+
+(define (append x y)
+  (if (null? x)
+      y
+      (cons (car x) 
+            (append (cdr x) y))))
+; for 2.27
+(define (reverse items)
+  (if (null? (cdr items))
+      items
+      (append (reverse (cdr items)) (cons (car items) '()))))
+; wrong deep reverse
+(define (deep-reverse items)
+  (if (null? (cdr items))
+      items
+      (append (deep-reverse (cdr items))
+              (cons (let ((list-tmp (car items)))
+                      (if (pair? list-tmp)
+                          (deep-reverse list-tmp)
+                          list-tmp))
+                    '()))))
+; right deep reverse!!!
+(define (better-deep-reverse items)
+  (reverse-helper items '()))
+
+(define (reverse-helper items res)
+  (if (null? items)
+      res
+      (if (pair? (car items))
+          (reverse-helper (cdr items) (cons (reverse-helper (car items) '()) res))
+          (reverse-helper (cdr items) (cons (car items) res)))))
+
+
+(define x3 (list (list 1 2) (list 3 4)))
+      
